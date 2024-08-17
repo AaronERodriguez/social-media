@@ -17,6 +17,7 @@ import type {
 import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as images from "../images.js";
+import type * as posts from "../posts.js";
 import type * as user from "../user.js";
 import type * as _utils from "../_utils.js";
 
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   files: typeof files;
   http: typeof http;
   images: typeof images;
+  posts: typeof posts;
   user: typeof user;
   _utils: typeof _utils;
 }>;

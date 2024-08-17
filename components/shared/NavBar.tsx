@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import CreatePostDialog from '@/app/(root)/_components/CreatePostDialog'
 
 type Props = {}
 
@@ -20,16 +21,17 @@ const NavBar = (props: Props) => {
   return (
     <nav className='w-full fixed z-10 flex flex-row justify-between p-2 bg-secondary items-center font-bold text-2xl'>
         <Link href={'/'} className='w-full text-secondary-foreground'>Connected</Link>
-        <div>
+        <div className='flex flex-row gap-4'>
             <Button size={'icon'}>
                 <Home />
             </Button>
+            <CreatePostDialog />
         </div>
         <div className='flex flex-row justify-end items-center gap-7 w-full'>
             <ModeToggle />
             <Tooltip >
                 <DropdownMenu>
-                    <DropdownMenuTrigger className='flex items-center justify-center'>
+                    <DropdownMenuTrigger className='flex items-center justify-center focus:border-none active:border-none'>
                         <TooltipTrigger>
                             <Avatar>
                                 <AvatarImage src={user?.imageUrl} />

@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ConvexClientProvider>
-            <TooltipProvider>
+            <TooltipProvider delayDuration={100}>
               <ErrorBoundary fallbackRender={MyFallbackComponent}>
                 <NavBar />
                 <div className="h-[calc(100vh-56px)] p-2 relative top-14">

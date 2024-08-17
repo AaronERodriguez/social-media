@@ -9,6 +9,13 @@ export default defineSchema({
         email: v.string(),
         followers: v.optional(v.array(v.id("users")))
     }).index("by_email", ["email"]).index("by_clerkId", ["clerkId"]),
+    posts: defineTable({
+        userId: v.id("users"),
+        title: v.string(),
+        description: v.string(),
+        type: v.string(),
+        url: v.string()
+    }).index("by_userId", ["userId"]).index("by_type", ["type"]),
     images: defineTable({
         storageId: v.string(),
         userId: v.id("users"),
