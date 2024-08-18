@@ -54,16 +54,10 @@ const CreatePostDialog = (props: Props) => {
     const type = form.watch("type")
     
     useEffect(() => {
-        console.log(type)
         setSelected("")
-        form.resetField("title")
-        form.resetField("description")
         form.resetField("url")
     }, [type])
 
-    useEffect(() => {
-        console.log(videos)
-    }, [videos])
     
     const toggleSelection = (imageUrl: string) => {
         if (selected === imageUrl) {

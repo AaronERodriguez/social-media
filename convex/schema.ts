@@ -11,10 +11,13 @@ export default defineSchema({
     }).index("by_email", ["email"]).index("by_clerkId", ["clerkId"]),
     posts: defineTable({
         userId: v.id("users"),
+        username: v.string(),
+        avatarUrl: v.string(),
         title: v.string(),
         description: v.string(),
         type: v.string(),
-        url: v.string()
+        url: v.string(),
+        likes: v.optional(v.array(v.id("users")))
     }).index("by_userId", ["userId"]).index("by_type", ["type"]),
     images: defineTable({
         storageId: v.string(),
