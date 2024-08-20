@@ -5,6 +5,7 @@ import { usePaginatedQuery, useQuery } from 'convex/react';
 import React, { useEffect } from 'react'
 import PostContainer from './_components/PostContainer';
 import {useInView} from 'react-intersection-observer';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
   const {results: posts, status, loadMore} = usePaginatedQuery(api.posts.getAll,
@@ -28,7 +29,10 @@ useEffect(() => {
         {posts?.map((post) => {
           return <PostContainer post={post} key={post._id} />
         })}
-        <span ref={ref}></span>
+        {status !== 'Exhausted'}
+        <span ref={ref}>
+          <Skeleton className='w-64 h-96'></Skeleton>
+        </span>
       </div>
     </>
   );
