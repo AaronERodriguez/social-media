@@ -6,12 +6,15 @@ import Image from 'next/image'
 import React from 'react'
 
 type Props = {
-    post: Post
+    post: Post;
 }
 
 function PostContainer({post}: Props) {
+
+    
+
   return (
-    <Card className='w-64 h-96 flex flex-col items-center'>
+    <Card className={`w-64 h-96 flex flex-col items-center`}>
         <CardHeader className='w-full h-full flex flex-col justify-between'>
             <CardTitle>{post.title}</CardTitle>
             {post.type === 'images' ? <img src={post.url} alt={post.title} className='max-w-64 max-h-96' /> : 

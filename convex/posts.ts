@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getUsersByClerkId } from "./_utils";
+import { paginationOptsValidator } from "convex/server";
 
 
 export const create = mutation({
@@ -38,7 +39,8 @@ export const create = mutation({
 })
 
 export const getAll = query({
-    handler: async (ctx) => {
+    args: {paginationOpts: paginationOptsValidator },
+    handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
     
         if(!identity) {
@@ -52,7 +54,7 @@ export const getAll = query({
             throw new ConvexError("User not found")
         }
 
-        const posts = await ctx.db.query("posts").collect();
+        const posts = await ctx.db.query("posts").order("desc").paginate(args.paginationOpts);
 
         return posts
     }
