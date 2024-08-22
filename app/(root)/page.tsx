@@ -14,6 +14,7 @@ export default function Home() {
   );
 
   const {ref, inView} = useInView()
+  const user = useQuery(api.user.getUser);
 
 useEffect(() => {
   if (inView) {
@@ -27,12 +28,13 @@ useEffect(() => {
       <h1 className="text-primary text-center text-4xl font-bold">Home</h1>
       <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
         {posts?.map((post) => {
-          return <PostContainer post={post} key={post._id} />
+          return <PostContainer post={post} key={post._id} user={user} />
         })}
         {status !== 'Exhausted'}
         <span ref={ref}>
-          <Skeleton className='w-64 h-96'></Skeleton>
+          <Skeleton className='w-64 h-[400px]'></Skeleton>
         </span>
+        
       </div>
     </>
   );

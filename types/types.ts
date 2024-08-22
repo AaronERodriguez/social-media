@@ -12,3 +12,13 @@ export type Post = {
     userId: Id<"users">;
     avatarUrl: string;
 };
+
+export type UserType = {
+    _id: Id<"users">;
+    _creationTime: number;
+    followers?: Id<"users">[] | undefined;
+    username: string;
+    imageUrl: string;
+    clerkId: string;
+    email: string;
+} | undefined
