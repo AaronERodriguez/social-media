@@ -6,6 +6,7 @@ import { Post, UserType } from '@/types/types'
 import { MoreVertical, User } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
+import DeletePostDialog from './DeletePostDialog'
 
 type Props = {
     post: Post;
@@ -29,7 +30,7 @@ function PostContainer({post, user}: Props) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem className='text-destructive'>
-                            Delete
+                            <DeletePostDialog post={post} />
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu> : null}
