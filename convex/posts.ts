@@ -58,6 +58,8 @@ export const deletePost = mutation({
 
         if (!post) {
             throw new ConvexError("Post not found")
+        } else if (post.userId !== currentUser._id) {
+            throw new ConvexError("You can't delete this post")
         }
 
         await ctx.db.delete(post._id)
@@ -83,5 +85,31 @@ export const getAll = query({
         const posts = await ctx.db.query("posts").order("desc").paginate(args.paginationOpts);
 
         return posts
+    }
+})
+
+export const get = query({
+    args: {postId: v.id("posts")},
+    handler: async (ctx,args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const post = await ctx.db.get(args.postId);
+        
+        if (!post) {
+            throw new ConvexError("Post not found")
+        }
+
+        return post
     }
 })
