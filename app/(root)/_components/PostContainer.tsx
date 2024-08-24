@@ -3,11 +3,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Post, UserType } from '@/types/types'
-import { MoreVertical, User } from 'lucide-react'
+import { MoreVertical, ThumbsUp, User } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import DeletePostDialog from './DeletePostDialog'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useMutationState } from '@/hooks/useMutationState'
+import { api } from '@/convex/_generated/api'
+import { toast } from 'sonner'
+import { ConvexError } from 'convex/values'
 
 type Props = {
     post: Post;
@@ -17,19 +22,29 @@ type Props = {
 function PostContainer({post, user}: Props) {
 
     const [open, setOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [canOpen, setCanOpen] = useState(true);
+
+    const {mutate: likePost, pending} = useMutationState(api.posts.toggleLike)
+
+    const handleLike = async () => {
+        await likePost({postId: post._id}).then(() => {
+            return
+        }).catch(error => {
+            toast.error(error instanceof ConvexError ? error.data : "Unexpected Error Occurred")
+        })
+    }
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={(e) => setDialogOpen(canOpen ? e.valueOf() : false)}>
         <DialogTrigger className='text-start transition-transform hover:scale-105 duration-300'>
             <Card className={`w-64 h-[400px] flex flex-col items-center`}>
                 <CardHeader className='w-full h-full flex flex-col justify-between'>
                     <div className='flex justify-between items-center'>
                         <CardTitle className='truncate'>{post.title}</CardTitle>
                         {user?._id === post.userId ? <DropdownMenu open={open} onOpenChange={setOpen}>
-                            <DropdownMenuTrigger>
-                                <Button size={'icon'}>
-                                    <MoreVertical />
-                                </Button>
+                            <DropdownMenuTrigger className='transition-transform duration-300 hover:scale-125'>
+                                <MoreVertical />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem onClick={(e) => e.preventDefault()} className='text-destructive'>
@@ -50,6 +65,19 @@ function PostContainer({post, user}: Props) {
                     <span className='text-primary-foreground'>
                         {post.username}
                     </span>
+                    </div>
+                    <div className='flex justify-start items-center gap-4'>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button disabled={pending} onMouseEnter={() => setCanOpen(false)} onMouseLeave={() => setCanOpen(true)} onClick={handleLike} size={'icon'} variant={post.likes?.indexOf(user!._id) === -1 ? 'secondary' : 'default'}>
+                                    <ThumbsUp />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Like
+                            </TooltipContent>
+                        </Tooltip>
+                        <span>{post.likes?.length} {post.likes?.length === 1 ? 'Like' : 'Likes'}</span>
                     </div>
                     <CardDescription className='truncate max-h-24'>
                     {(new Date(post._creationTime)).toDateString()}<br/>
@@ -76,6 +104,8 @@ function PostContainer({post, user}: Props) {
                 </span>      
                 </div>
                 <span className='text-muted-foreground'>{(new Date(post._creationTime)).toDateString()}</span>
+                <br />
+                Description:
                 <DialogDescription>
                     {post.description}
                 </DialogDescription>

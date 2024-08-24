@@ -66,6 +66,40 @@ export const deletePost = mutation({
     }
 })
 
+export const toggleLike = mutation({
+    args: {postId: v.id("posts")},
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const post = await ctx.db.get(args.postId);
+
+        if (!post) {
+            throw new ConvexError("Post not found")
+        }
+
+        if (post.likes?.includes(currentUser._id)) {
+            await ctx.db.patch(post._id, {
+                likes: post.likes.filter(like => like !== currentUser._id)
+            })
+        } else {
+            await ctx.db.patch(post._id, {
+                likes: [currentUser._id, ...post.likes!]
+            })
+        }
+    }
+})
+
 export const getAll = query({
     args: {paginationOpts: paginationOptsValidator },
     handler: async (ctx, args) => {
