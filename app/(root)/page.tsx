@@ -30,10 +30,10 @@ useEffect(() => {
         {posts?.map((post) => {
           return <PostContainer post={post} key={post._id} user={user} />
         })}
-        {status !== 'Exhausted'}
-        <span ref={ref}>
+        {status === 'Exhausted' ? null : <span ref={ref}>
           <Skeleton className='w-64 h-[400px]'></Skeleton>
-        </span>
+        </span>}
+        
         
       </div>
     </>

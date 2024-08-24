@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Post, UserType } from '@/types/types'
 import { MoreVertical, User } from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import DeletePostDialog from './DeletePostDialog'
 
 type Props = {
@@ -15,22 +15,22 @@ type Props = {
 
 function PostContainer({post, user}: Props) {
 
-    
+    const [open, setOpen] = useState(false);
 
   return (
     <Card className={`w-64 h-[400px] flex flex-col items-center`}>
         <CardHeader className='w-full h-full flex flex-col justify-between'>
             <div className='flex justify-between items-center'>
                 <CardTitle className='truncate'>{post.title}</CardTitle>
-                {user?._id === post.userId ? <DropdownMenu>
+                {user?._id === post.userId ? <DropdownMenu open={open} onOpenChange={setOpen}>
                     <DropdownMenuTrigger>
                         <Button size={'icon'}>
                             <MoreVertical />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem className='text-destructive'>
-                            <DeletePostDialog post={post} />
+                        <DropdownMenuItem onClick={(e) => e.preventDefault()} className='text-destructive'>
+                            <DeletePostDialog post={post} setOpen={setOpen} />
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu> : null}
