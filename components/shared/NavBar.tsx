@@ -20,14 +20,14 @@ const NavBar = (props: Props) => {
     const user = useQuery(api.user.getUser);
   return (
     <nav className='w-full fixed z-10 flex flex-row justify-between p-2 bg-secondary items-center font-bold text-2xl'>
-        <Link href={'/'} className='w-full text-secondary-foreground'>Connected</Link>
+        <Link href={'/'} className='text-secondary-foreground'>Connected</Link>
         <div className='flex flex-row gap-4'>
             <Button size={'icon'}>
                 <Home />
             </Button>
             <CreatePostDialog />
         </div>
-        <div className='flex flex-row justify-end items-center gap-7 w-full'>
+        <div className='flex flex-row justify-end items-center gap-7'>
             <ModeToggle />
             <Tooltip >
                 <DropdownMenu>
