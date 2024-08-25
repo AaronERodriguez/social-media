@@ -32,7 +32,8 @@ export const create = mutation({
             userId: currentUser._id,
             username: currentUser.username,
             avatarUrl: currentUser.imageUrl,
-            likes: []
+            likes: [],
+            commentCount: 0
         })
 
     }

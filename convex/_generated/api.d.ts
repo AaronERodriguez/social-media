@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as comments from "../comments.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as images from "../images.js";
@@ -30,6 +31,7 @@ import type * as _utils from "../_utils.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  comments: typeof comments;
   files: typeof files;
   http: typeof http;
   images: typeof images;
