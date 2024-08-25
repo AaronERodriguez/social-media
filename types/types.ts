@@ -4,6 +4,7 @@ export type Post = {
     _id: Id<"posts">;
     _creationTime: number;
     likes?: Id<"users">[] | undefined;
+    commentCount?: number | undefined;
     title: string;
     description: string;
     type: string;

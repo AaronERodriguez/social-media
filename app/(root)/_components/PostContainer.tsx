@@ -66,7 +66,9 @@ function PostContainer({post, user}: Props) {
                         {post.username}
                     </span>
                     </div>
-                    <div className='flex justify-start items-center gap-4'>
+                    <div className='flex justify-between items-center gap-4'>
+                        
+                        <div className='flex flex-row items-center gap-2'>
                         <Tooltip>
                             <TooltipTrigger>
                                 <Button disabled={pending} onMouseEnter={() => setCanOpen(false)} onMouseLeave={() => setCanOpen(true)} onClick={handleLike} size={'icon'} variant={post.likes?.indexOf(user!._id) === -1 ? 'secondary' : 'default'}>
@@ -77,7 +79,8 @@ function PostContainer({post, user}: Props) {
                                 Like
                             </TooltipContent>
                         </Tooltip>
-                        <span>{post.likes?.length} {post.likes?.length === 1 ? 'Like' : 'Likes'}</span>
+                            {post.likes?.length}</div>
+                        <div>{post.commentCount} comments</div>
                     </div>
                     <CardDescription className='truncate max-h-24'>
                     {(new Date(post._creationTime)).toDateString()}<br/>
