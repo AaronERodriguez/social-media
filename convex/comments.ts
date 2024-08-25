@@ -42,3 +42,31 @@ export const create = mutation({
 
     }
 })
+
+export const getPosts = query({
+    args: {paginationOpts: paginationOptsValidator, postId: v.id("posts") },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const post = await ctx.db.get(args.postId);
+
+        if (!post) {
+            throw new ConvexError("Post not found");
+        }
+
+        const comments = await ctx.db.query("comments").withIndex("by_postId", q=>q.eq("postId", args.postId)).order("desc").paginate(args.paginationOpts);
+
+        return comments
+    }
+})
