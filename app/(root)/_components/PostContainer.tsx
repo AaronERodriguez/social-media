@@ -195,7 +195,7 @@ function PostContainer({post, user}: Props) {
                 </Form>
                 {comments.length > 0 ?<ScrollArea className='h-36'>
                     {comments.map(comment => {
-                        return <Comment comment={comment} />
+                        return <Comment comment={comment} key={comment._id} />
                     })}
                     {status === 'Exhausted' ? null : <span ref={ref}>
                         <Skeleton className='w-full h-36'></Skeleton>
