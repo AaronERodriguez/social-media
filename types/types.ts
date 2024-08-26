@@ -14,6 +14,16 @@ export type Post = {
     avatarUrl: string;
 };
 
+export type CommentType = {
+    _id: Id<"comments">;
+    _creationTime: number;
+    username: string;
+    userId: Id<"users">;
+    avatarUrl: string;
+    postId: string;
+    content: string;
+}
+
 export type UserType = {
     _id: Id<"users">;
     _creationTime: number;
