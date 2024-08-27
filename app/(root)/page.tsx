@@ -22,7 +22,7 @@ useEffect(() => {
       loadMore(6);
     }
   }
-}, [inView])
+}, [inView, status])
 
   return (<>
       <h1 className="text-primary text-center text-4xl font-bold">Home</h1>

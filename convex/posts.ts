@@ -148,3 +148,54 @@ export const get = query({
         return post
     }
 })
+
+export const getMine = query({
+    args: {paginationOpts: paginationOptsValidator},
+    handler: async (ctx,args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const posts = await ctx.db.query("posts").withIndex("by_userId", q=>q.eq("userId", currentUser._id)).order('desc').paginate(args.paginationOpts)
+
+        return posts
+    }
+})
+
+
+export const getByUser = query({
+    args: {paginationOpts: paginationOptsValidator, userId: v.id("users")},
+    handler: async (ctx,args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const user = await ctx.db.get(args.userId);
+        
+        if (!user) {
+            throw new ConvexError("Post not found")
+        }
+
+        const posts = await ctx.db.query("posts").withIndex("by_userId", q=>q.eq("userId", user._id)).order('desc').paginate(args.paginationOpts)
+
+        return posts
+    }
+})

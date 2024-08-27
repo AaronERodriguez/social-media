@@ -82,7 +82,7 @@ function PostContainer({post, user}: Props) {
             loadMore(4);
           }
         }
-      }, [inView])
+      }, [inView, status])
 
   return (
     <Dialog open={dialogOpen} onOpenChange={(e) => {

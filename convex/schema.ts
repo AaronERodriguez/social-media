@@ -7,7 +7,8 @@ export default defineSchema({
         imageUrl: v.string(),
         clerkId: v.string(),
         email: v.string(),
-        followers: v.optional(v.array(v.id("users")))
+        followers: v.optional(v.array(v.id("users"))),
+        following: v.optional(v.array(v.id("users")))
     }).index("by_email", ["email"]).index("by_clerkId", ["clerkId"]),
     posts: defineTable({
         userId: v.id("users"),
