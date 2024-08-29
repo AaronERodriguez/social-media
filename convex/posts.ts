@@ -199,3 +199,25 @@ export const getByUser = query({
         return posts
     }
 })
+
+export const searchQuery = query({
+    args: {paginationOpts: paginationOptsValidator, searchQuery: v.string() },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const posts = await ctx.db.query("posts").withSearchIndex("search_body", (q) => q.search("title", args.searchQuery)).paginate(args.paginationOpts);
+
+        return posts
+    }
+})

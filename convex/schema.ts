@@ -20,7 +20,9 @@ export default defineSchema({
         url: v.string(),
         likes: v.optional(v.array(v.id("users"))),
         commentCount: v.optional(v.number())
-    }).index("by_userId", ["userId"]).index("by_type", ["type"]),
+    }).index("by_userId", ["userId"]).index("by_type", ["type"]).searchIndex("search_body", {
+        searchField: "title",
+    }),
     images: defineTable({
         storageId: v.string(),
         userId: v.id("users"),
