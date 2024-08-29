@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/button'
-import { Home, User } from 'lucide-react'
+import { Home, Search, User } from 'lucide-react'
 import { ModeToggle } from './ModeToggle'
 import { useClerk, UserButton } from '@clerk/nextjs'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
@@ -28,6 +28,11 @@ const NavBar = (props: Props) => {
                 </Button>
             </Link>
             <CreatePostDialog />
+            <Link href={'/posts'}>
+                <Button size={'icon'}>
+                    <Search />
+                </Button>
+            </Link>
         </div>
         <div className='flex flex-row justify-end items-center gap-7'>
             <ModeToggle />
