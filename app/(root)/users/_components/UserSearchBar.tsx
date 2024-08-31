@@ -13,7 +13,7 @@ type Props = {
     setInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SearchBar = ({input, setInput}: Props) => {
+const UserSearchBar = ({input, setInput}: Props) => {
     const handleChange = (value: React.ChangeEvent<HTMLInputElement>) => {
         setInput(value.target.value);
     }
@@ -36,14 +36,14 @@ const SearchBar = ({input, setInput}: Props) => {
   
     return (
     <Card className='flex flex-row items-center p-2'>
-        <Link ref={redirectRef} href={input !== '' ? `/posts/${input.replace(/ /g, '_')}` : ''}>
+        <Link ref={redirectRef} href={input !== '' ? `/users/${input.replace(/ /g, '_')}` : ''}>
             <Button size={'icon'}>
                 <Search />
             </Button>
         </Link>
-        <Input className='border-none focus:outline-none' id='search-bar' type='text' placeholder='Search for a post...' value={input} onChange={(e) => handleChange(e)} />
+        <Input className='border-none focus:outline-none' id='search-bar' type='text' placeholder='Search for a user...' value={input} onChange={(e) => handleChange(e)} />
     </Card>
   )
 }
 
-export default SearchBar
+export default UserSearchBar

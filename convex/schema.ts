@@ -10,7 +10,7 @@ export default defineSchema({
         followers: v.optional(v.array(v.id("users"))),
         following: v.optional(v.array(v.id("users")))
     }).index("by_email", ["email"]).index("by_clerkId", ["clerkId"]).searchIndex("search_body", {
-        searchField: "username",
+        searchField: "username"
     }),
     posts: defineTable({
         userId: v.id("users"),

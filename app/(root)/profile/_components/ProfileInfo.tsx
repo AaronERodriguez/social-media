@@ -1,13 +1,17 @@
+"use client"
+
 import { Avatar } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { UserType } from '@/types/types'
 import React from 'react'
 
 type Props = {
     user: UserType;
+    currentUser: UserType
 }
 
-const ProfileInfo = ({user}: Props) => {
+const ProfileInfo = ({user, currentUser}: Props) => {
   return (
     <Card>
         <CardHeader>
@@ -24,6 +28,11 @@ const ProfileInfo = ({user}: Props) => {
                         <p>Followers</p>
                     </div>
                 </div>
+            </div>
+            <div>
+                {currentUser?._id === user?._id ? null : <div className='flex flex-row'>
+                    {currentUser ? user?.followers?.indexOf(currentUser._id) === -1 ? <Button className='w-full'>Follow</Button> : <Button variant={'secondary'}>Unfollow</Button> : null}
+                </div> }
             </div>
         </CardHeader>
     </Card>

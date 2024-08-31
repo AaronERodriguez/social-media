@@ -124,6 +124,6 @@ export const searchQuery = query({
 
         const users = await ctx.db.query("users").withSearchIndex("search_body", (q) => q.search("username", args.searchQuery)).paginate(args.paginationOpts);
 
-        return users
+        return users;
     }
 })

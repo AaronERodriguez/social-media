@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/button'
-import { Home, Search, User } from 'lucide-react'
+import { Home, Search, User, UserSearch } from 'lucide-react'
 import { ModeToggle } from './ModeToggle'
 import { useClerk, UserButton } from '@clerk/nextjs'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
@@ -31,6 +31,11 @@ const NavBar = (props: Props) => {
             <Link href={'/posts'}>
                 <Button size={'icon'}>
                     <Search />
+                </Button>
+            </Link>
+            <Link href={'/users'}>
+                <Button size={'icon'}>
+                    <UserSearch />
                 </Button>
             </Link>
         </div>

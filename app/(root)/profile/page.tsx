@@ -31,7 +31,7 @@ const Profile = (props: Props) => {
 
   return (
     <div>
-        <ProfileInfo user={user} />
+        <ProfileInfo user={user} currentUser={user} />
         <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
             {posts?.map((post) => {
                 return <PostContainer post={post} key={post._id} user={user} />
