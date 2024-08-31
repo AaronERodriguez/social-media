@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values"
 import {internalMutation, internalQuery, mutation, query, QueryCtx} from "./_generated/server"
 import { getUsersByClerkId } from "./_utils";
+import { paginationOptsValidator } from "convex/server";
 
 export const create = internalMutation({
     args: {
@@ -104,3 +105,25 @@ export const getAll = query({args: {}, handler: async (ctx, args) => {
 
     return users;
 }})
+
+export const searchQuery = query({
+    args: {paginationOpts: paginationOptsValidator, searchQuery: v.string() },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const users = await ctx.db.query("users").withSearchIndex("search_body", (q) => q.search("username", args.searchQuery)).paginate(args.paginationOpts);
+
+        return users
+    }
+})
