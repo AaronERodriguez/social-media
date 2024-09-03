@@ -16,6 +16,9 @@ const UserDetails = (props: Props) => {
     const {userId} = useParams();
     const currentUser = useQuery(api.user.getUser);
     const user = useQuery(api.user.getOtherUser, {userId: userId as Id<"users">})
+    const isFollowing = useQuery(api.user.checkIfFollowing, {
+      userId: userId as Id<"users">
+    })
 
     const {results: posts, status, loadMore} = usePaginatedQuery(api.posts.getByUser,
         {userId: userId as Id<"users">},
@@ -34,7 +37,7 @@ const UserDetails = (props: Props) => {
 
   return (
     <div className='flex flex-col gap-4'>
-        <ProfileInfo user={user} currentUser={currentUser} />
+        <ProfileInfo isFollowing={isFollowing} user={user} currentUser={currentUser} postCount={posts.length} />
         <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
                 {posts?.map((post) => {
                     return <PostContainer post={post} key={post._id} user={user} />

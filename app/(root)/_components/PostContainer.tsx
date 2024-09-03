@@ -23,6 +23,7 @@ import { useInView } from 'react-intersection-observer'
 import Comment from './Comment'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import Link from 'next/link'
 
 type Props = {
     post: Post;
@@ -150,15 +151,18 @@ function PostContainer({post, user}: Props) {
                     </video>
                 }
                 <div className='flex flex-row justify-between items-center gap-2'>
-                    <div className='flex flex-row items-center gap-2'>
-                        Posted by: <Avatar>
-                        <AvatarImage src={post.avatarUrl} />
-                        <AvatarFallback><User /></AvatarFallback>
-                    </Avatar>
-                    <span className='text-primary-foreground'>
-                        {post.username}
-                    </span>      
-                    </div>
+                   
+                        <div className='flex flex-row items-center gap-2'>
+                            Posted by:  <Link className='flex flex-row items-center gap-2' href={`/users/details/${post.userId}`}><Avatar>
+                            <AvatarImage src={post.avatarUrl} />
+                            <AvatarFallback><User /></AvatarFallback>
+                        </Avatar>
+                        <span className='text-primary-foreground'>
+                            {post.username}
+                        </span>
+                        </Link>
+                        </div>
+                    
                 <div className='flex flex-row items-center gap-2'>
                         <Tooltip>
                             <TooltipTrigger>

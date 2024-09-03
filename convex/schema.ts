@@ -7,11 +7,17 @@ export default defineSchema({
         imageUrl: v.string(),
         clerkId: v.string(),
         email: v.string(),
-        followers: v.optional(v.array(v.id("users"))),
-        following: v.optional(v.array(v.id("users")))
+        followersCount: v.number(),
+        followingCount: v.number()
     }).index("by_email", ["email"]).index("by_clerkId", ["clerkId"]).searchIndex("search_body", {
         searchField: "username"
     }),
+    users_followers: defineTable({
+        userId: v.id("users"),
+        followerId: v.id("users"),
+        followerUsername: v.string(),
+        followerAvatarUrl: v.string()
+    }).index("by_userId", ["userId"]).index("by_followerId", ["followerId"]).index("by_userId_followerId", ["userId", "followerId"]),
     posts: defineTable({
         userId: v.id("users"),
         username: v.string(),

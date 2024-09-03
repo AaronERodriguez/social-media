@@ -13,6 +13,7 @@ type Props = {}
 const Profile = (props: Props) => {
 
     const user = useQuery(api.user.getUser)
+
     const {results: posts, status, loadMore} = usePaginatedQuery(api.posts.getMine,
         {},
         { initialNumItems: 6}
@@ -30,8 +31,8 @@ const Profile = (props: Props) => {
 
 
   return (
-    <div>
-        <ProfileInfo user={user} currentUser={user} />
+    <div className='flex flex-col gap-4'>
+        <ProfileInfo isFollowing={false} user={user} currentUser={user} postCount={posts.length} />
         <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
             {posts?.map((post) => {
                 return <PostContainer post={post} key={post._id} user={user} />

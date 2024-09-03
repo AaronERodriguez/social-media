@@ -27,10 +27,10 @@ export type CommentType = {
 export type UserType = {
     _id: Id<"users">;
     _creationTime: number;
-    followers?: Id<"users">[] | undefined;
-    following?: Id<"users">[] | undefined;
     username: string;
     imageUrl: string;
     clerkId: string;
     email: string;
+    followersCount: number;
+    followingCount: number;
 } | undefined

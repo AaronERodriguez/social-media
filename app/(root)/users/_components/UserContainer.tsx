@@ -24,7 +24,7 @@ const UserContainer = ({user}: Props) => {
                     <CardTitle>{user?.username}</CardTitle>
                 </div>
                 <div className='flex flex-row'>
-                    <span>{user?.followers?.length}</span> <User2/>
+                    <span>{user?.followersCount}</span> <User2/>
                 </div>
             </CardHeader>
         </Card>

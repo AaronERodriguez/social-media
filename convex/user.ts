@@ -11,7 +11,7 @@ export const create = internalMutation({
         email: v.string(),
     },
     handler: async (ctx, args) => {
-        await ctx.db.insert("users", {...args, followers: [], following: []});
+        await ctx.db.insert("users", {...args, followersCount: 0, followingCount: 0});
     },
 })
 
@@ -125,5 +125,84 @@ export const searchQuery = query({
         const users = await ctx.db.query("users").withSearchIndex("search_body", (q) => q.search("username", args.searchQuery)).paginate(args.paginationOpts);
 
         return users;
+    }
+})
+
+export const toggleFollow = mutation({
+    args: {userId: v.id("users")},
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const userToFollow = await ctx.db.get(args.userId)
+
+        if (!userToFollow) {
+            throw new ConvexError("User not found")
+        } else if (userToFollow._id === currentUser._id) {
+            throw new ConvexError("Cannot follow yourself")
+        }
+
+        const isFollowing = await ctx.db.query("users_followers").withIndex("by_userId_followerId", q => q.eq("userId", userToFollow._id).eq("followerId", currentUser._id)).unique()
+
+        if (isFollowing) {
+            //Unfollow
+            await ctx.db.delete(isFollowing._id)
+            await ctx.db.patch(userToFollow._id, {
+                followersCount: userToFollow.followersCount! - 1
+            })
+            await ctx.db.patch(currentUser._id, {
+                followingCount: currentUser.followingCount! - 1
+            })
+        } else {
+            //Follow
+            await ctx.db.insert("users_followers", {
+                userId: userToFollow._id,
+                followerId: currentUser._id,
+                followerUsername: currentUser.username,
+                followerAvatarUrl: currentUser.imageUrl
+            })
+            await ctx.db.patch(userToFollow._id, {
+                followersCount: userToFollow.followersCount! + 1
+            })
+            await ctx.db.patch(currentUser._id, {
+                followingCount: currentUser.followingCount! + 1
+            })
+        }
+    }
+})
+
+export const checkIfFollowing = query({
+    args: {userId: v.id("users")},
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const isFollowing = await ctx.db.query("users_followers").withIndex("by_userId_followerId", q => q.eq("userId", args.userId).eq("followerId", currentUser._id)).unique();
+
+        if (isFollowing) {
+            return true
+        } else {
+            return false
+        }
     }
 })
