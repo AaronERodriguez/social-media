@@ -34,3 +34,12 @@ export type UserType = {
     followersCount: number;
     followingCount: number;
 } | undefined
+
+export type Followers = {
+    _id: Id<"users_followers">;
+    _creationTime: number;
+    userId: Id<"users">;
+    followerId: Id<"users">;
+    followerUsername: string;
+    followerAvatarUrl: string;
+}[]

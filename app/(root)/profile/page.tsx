@@ -19,6 +19,11 @@ const Profile = (props: Props) => {
         { initialNumItems: 6}
       );
 
+    const {results: followers, status: followersStatus, loadMore: followersLoadMore} = usePaginatedQuery(api.user.getFollowers, 
+      {},
+      { initialNumItems: 6 }
+    )
+
       const {ref, inView} = useInView()
 
       useEffect(() => {
@@ -32,7 +37,7 @@ const Profile = (props: Props) => {
 
   return (
     <div className='flex flex-col gap-4'>
-        <ProfileInfo isFollowing={false} user={user} currentUser={user} postCount={posts.length} />
+        <ProfileInfo isFollowing={false} user={user} currentUser={user} postCount={posts.length} followers={followers} followersStatus={followersStatus} followersLoadMore={followersLoadMore} />
         <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
             {posts?.map((post) => {
                 return <PostContainer post={post} key={post._id} user={user} />

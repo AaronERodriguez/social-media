@@ -206,3 +206,53 @@ export const checkIfFollowing = query({
         }
     }
 })
+
+export const getFollowers = query({
+    args: {paginationOpts: paginationOptsValidator },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const users = await ctx.db.query("users_followers").withIndex("by_userId", (q) => q.eq("userId", currentUser._id)).paginate(args.paginationOpts);
+
+        return users;
+    }
+})
+
+export const getUserFollowers = query({
+    args: {paginationOpts: paginationOptsValidator, userId: v.id("users") },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const user = await ctx.db.get(args.userId);
+
+        if (!user) {
+            throw new ConvexError("User not found")
+        }
+
+        const users = await ctx.db.query("users_followers").withIndex("by_userId", (q) => q.eq("userId", user._id)).paginate(args.paginationOpts);
+
+        return users;
+    }
+})
