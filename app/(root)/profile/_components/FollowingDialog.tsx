@@ -43,7 +43,7 @@ const FollowingDialog = ({following, followingCount, followingLoadMore, followin
         </DialogHeader>
         <ScrollArea className='max-h-96'>
           {following.length > 0 ? following.map(follower => {
-            return <Link href={`/users/details/${follower?.userId}`}>
+            return <Link href={`/users/details/${follower?.userId}`} key={follower.userId}>
             <Card className='transition-colors hover:bg-muted '>
                 <CardHeader className='flex flex-row justify-between'>
                     <div className='flex flex-row items-center gap-4'>
