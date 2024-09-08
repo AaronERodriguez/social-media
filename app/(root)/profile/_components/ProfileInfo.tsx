@@ -10,6 +10,7 @@ import { ConvexError } from 'convex/values';
 import React from 'react'
 import { toast } from 'sonner';
 import FollowersDialog from './FollowersDialog';
+import FollowingDialog from './FollowingDialog';
 
 type Props = {
     user: UserType;
@@ -19,9 +20,12 @@ type Props = {
     followers: Followers;
     followersStatus: "LoadingFirstPage" | "CanLoadMore" | "LoadingMore" | "Exhausted";
     followersLoadMore: (numItems: number) => void;
+    following: Followers;
+    followingStatus: "LoadingFirstPage" | "CanLoadMore" | "LoadingMore" | "Exhausted";
+    followingLoadMore: (numItems: number) => void;
 }
 
-const ProfileInfo = ({user, currentUser, postCount, isFollowing, followers, followersStatus, followersLoadMore}: Props) => {
+const ProfileInfo = ({user, currentUser, postCount, isFollowing, followers, followersStatus, followersLoadMore, following, followingLoadMore, followingStatus}: Props) => {
 
     const {mutate: follow, pending} = useMutationState(api.user.toggleFollow);
 
@@ -41,10 +45,7 @@ const ProfileInfo = ({user, currentUser, postCount, isFollowing, followers, foll
                 <img src={user?.imageUrl} className='w-44 h-44' />
                 <div className='flex flex-row w-full justify-around items-center'>
                     <FollowersDialog followers={followers} followersLoadMore={followersLoadMore} followersStatus={followersStatus} followersCount={user?.followersCount} />
-                    <div className='flex flex-col items-center'>
-                        <p>{user?.followingCount}</p>
-                        <p>Following</p>
-                    </div>
+                    <FollowingDialog following={following} followingCount={user?.followingCount} followingLoadMore={followingLoadMore} followingStatus={followingStatus} />
                     <div className='flex flex-col items-center'>
                         <p>{postCount}</p>
                         <p>Posts</p>

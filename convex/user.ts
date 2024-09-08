@@ -169,7 +169,9 @@ export const toggleFollow = mutation({
                 userId: userToFollow._id,
                 followerId: currentUser._id,
                 followerUsername: currentUser.username,
-                followerAvatarUrl: currentUser.imageUrl
+                followerAvatarUrl: currentUser.imageUrl,
+                followingAvatarUrl: userToFollow.imageUrl,
+                followingUsername: userToFollow.username
             })
             await ctx.db.patch(userToFollow._id, {
                 followersCount: userToFollow.followersCount! + 1
@@ -224,6 +226,56 @@ export const getFollowers = query({
         }
 
         const users = await ctx.db.query("users_followers").withIndex("by_userId", (q) => q.eq("userId", currentUser._id)).paginate(args.paginationOpts);
+
+        return users;
+    }
+})
+
+export const getFollowing = query({
+    args: {paginationOpts: paginationOptsValidator },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const users = await ctx.db.query("users_followers").withIndex("by_followerId", (q) => q.eq("followerId", currentUser._id)).paginate(args.paginationOpts);
+
+        return users;
+    }
+})
+
+export const getUserFollowing = query({
+    args: {paginationOpts: paginationOptsValidator, userId: v.id("users") },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+    
+        if(!identity) {
+            throw new Error("Unauthorized")
+        }
+
+        const currentUser = await getUsersByClerkId({ctx, clerkId: identity.subject});
+
+
+        if (!currentUser) {
+            throw new ConvexError("User not found")
+        }
+
+        const user = await ctx.db.get(args.userId);
+
+        if (!user) {
+            throw new ConvexError("User not found")
+        }
+
+        const users = await ctx.db.query("users_followers").withIndex("by_followerId", (q) => q.eq("followerId", user._id)).paginate(args.paginationOpts);
 
         return users;
     }

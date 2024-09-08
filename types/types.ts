@@ -42,4 +42,6 @@ export type Followers = {
     followerId: Id<"users">;
     followerUsername: string;
     followerAvatarUrl: string;
+    followingUsername: string;
+    followingAvatarUrl: string;
 }[]

@@ -25,6 +25,11 @@ const UserDetails = (props: Props) => {
       { initialNumItems: 6 }
     )
 
+    const {results: following, status: followingStatus, loadMore: followingLoadMore} = usePaginatedQuery(api.user.getUserFollowing, 
+      {userId: userId as Id<"users">},
+      { initialNumItems: 6 }
+    )
+
     const {results: posts, status, loadMore} = usePaginatedQuery(api.posts.getByUser,
         {userId: userId as Id<"users">},
         { initialNumItems: 6}
@@ -42,7 +47,7 @@ const UserDetails = (props: Props) => {
 
   return (
     <div className='flex flex-col gap-4'>
-        <ProfileInfo followers={followers} followersLoadMore={followersLoadMore} followersStatus={followersStatus} isFollowing={isFollowing} user={user} currentUser={currentUser} postCount={posts.length} />
+        <ProfileInfo following={following} followingLoadMore={followingLoadMore} followingStatus={followingStatus} followers={followers} followersLoadMore={followersLoadMore} followersStatus={followersStatus} isFollowing={isFollowing} user={user} currentUser={currentUser} postCount={posts.length} />
         <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
                 {posts?.map((post) => {
                     return <PostContainer post={post} key={post._id} user={user} />
