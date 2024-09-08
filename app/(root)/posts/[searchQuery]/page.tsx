@@ -34,7 +34,7 @@ const Result = (props: Props) => {
   return (
     <div className='flex sm:flex-row items-center justify-center flex-col flex-wrap gap-4'>
       {posts.length === 0 ? <div>No Matches Found</div> : posts.map(post => {
-        return <PostContainer post={post} user={user} />
+        return <PostContainer post={post} user={user} key={post._id} />
       })}
       {status === 'Exhausted' ? null : <span ref={ref}>
           <Skeleton className='w-64 h-[400px]'></Skeleton>

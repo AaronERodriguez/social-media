@@ -31,7 +31,7 @@ const UserPage = (props: Props) => {
 
   return (
     <div>{users.map(userInstance => {
-      return <UserContainer user={userInstance} />
+      return <UserContainer user={userInstance} key={userInstance._id} />
     })}
     {status === 'Exhausted' ? null : <div ref={ref} >
       <Skeleton className='w-full h-24'></Skeleton>
